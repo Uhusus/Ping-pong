@@ -4,6 +4,7 @@ from spriteClass import *
 # Colors
 bg_color = (0, 0, 0)
 text_color = (255, 255, 255)
+win_score = 5
 
 # Window settings
 win_width = 600
@@ -59,30 +60,44 @@ while running:
     if ball.rect.y <= 0 or ball.rect.y + ball.rect.height >= win_height:
         ball.direction_y *= -1
 
-    
     # Bounce the ball off the paddles and increase speed
     if ball.rect.colliderect(paddle_left.rect):
-        ball.direction_x = 1  # Ensure it moves right
-        ball.rect.x = paddle_left.rect.right + 1  # Push ball out of paddle to prevent sticking
-        ball.speed += 0.1  # Increase speed
+        ball.direction_x = 1
+        ball.rect.x = paddle_left.rect.right + 1
+        ball.speed = ball.speed + 0.1  # Increase speed 
 
     if ball.rect.colliderect(paddle_right.rect):
-        ball.direction_x = -1  # Ensure it moves left
-        ball.rect.x = paddle_right.rect.left - ball.rect.width - 1  # Push ball out of paddle to prevent sticking
-        ball.speed += 0.1
+        ball.direction_x = -1
+        ball.rect.x = paddle_right.rect.left - ball.rect.width - 1
+        ball.speed = ball.speed + 0.1  # Increase speed
 
     # Check if the ball goes out of bounds
     if ball.rect.x <= 0:  # Right player scores
         score_right += 1
         ball.rect.x, ball.rect.y = win_width // 2, win_height // 2
         ball.direction_x = 1  # Reset direction to right
-        ball.speed = 4
+        ball.speed = 4  # Reset speed after a point
 
-    elif ball.rect.x >= 600:  # Left player scores
+    elif ball.rect.x >= win_width:  # Left player scores
         score_left += 1
         ball.rect.x, ball.rect.y = win_width // 2, win_height // 2
         ball.direction_x = -1  # Reset direction to left
-        ball.speed = 4
+        ball.speed = 4  # Reset speed after a point
+
+    # Check for a winner
+    if score_left == win_score:
+        winner_text = font_score.render("Left Player Wins!", True, text_color)
+        window.blit(winner_text, (win_width // 2 - winner_text.get_width() // 2, win_height // 2))
+        display.update()
+        time.delay(3000)  # Pause for 3 seconds to show the message
+        running = False  # Exit the game loop
+
+    elif score_right == win_score:
+        winner_text = font_score.render("Right Player Wins!", True, text_color)
+        window.blit(winner_text, (win_width // 2 - winner_text.get_width() // 2, win_height // 2))
+        display.update()
+        time.delay(3000)  # Pause for 3 seconds to show the message
+        running = False  # Exit the game loop
 
     # Update paddles
     paddle_left.update_p_left()
@@ -101,3 +116,6 @@ while running:
     # Update display
     display.update()
     clock.tick(60)
+
+
+quit()
