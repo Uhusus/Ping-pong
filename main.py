@@ -14,8 +14,7 @@ win_height = 500
 score_left = 0
 score_right = 0
 
-# Initialize Pygame
-init()
+
 font.init()
 
 window = display.set_mode((win_width, win_height))
@@ -56,7 +55,7 @@ while running:
     ball.rect.x += ball.speed * ball.direction_x
     ball.rect.y += ball.speed * ball.direction_y
 
-    # Bounce the ball off the top and bottom edges
+    # Bounce the ball off the top and bottom
     if ball.rect.y <= 0 or ball.rect.y + ball.rect.height >= win_height:
         ball.direction_y *= -1
 
@@ -113,7 +112,7 @@ while running:
     score_text = font_score.render(f"{score_left} - {score_right}", True, text_color)
     window.blit(score_text, (win_width // 2 - score_text.get_width() // 2, 20))
 
-    # Update display
+
     display.update()
     clock.tick(60)
 
